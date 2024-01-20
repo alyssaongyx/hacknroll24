@@ -41,8 +41,8 @@ export default function NavBar() {
           <img src="logo.svg" alt="LocalLinker Logo" className="logo" />
         </Link>
         <nav className="nav">
-          <Link to="/about" className="nav-link">
-            About
+          <Link to="/chatbot" className="nav-link">
+            Chatbot
           </Link>
           <Link to="/listings" className="nav-link">
             Listings
@@ -53,9 +53,6 @@ export default function NavBar() {
         </nav>
         {user ? (
           <div className="side">
-            <Link to="/chatbot" className="button-primary side-item">
-              Chatbot
-            </Link>
             <a onClick={handleSignOut} className="sign-out-button side-item">
               Sign Out
             </a>

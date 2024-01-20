@@ -2,7 +2,13 @@ import React from "react";
 import linkedinLogo from "../linkedinicon.svg";
 import githubLogo from "../githubicon.svg";
 
-function TeamMember({ imageUrl, name, designation, githubUrl, linkedinUrl }) {
+export default function TeamMember({
+  imageUrl,
+  name,
+  designation,
+  githubUrl,
+  linkedinUrl,
+}) {
   return (
     <div className="team-member-item">
       <img
@@ -24,5 +30,3 @@ function TeamMember({ imageUrl, name, designation, githubUrl, linkedinUrl }) {
     </div>
   );
 }
-
-export default TeamMember;

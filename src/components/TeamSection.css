@@ -120,13 +120,3 @@
   flex-basis: 60%;
   padding-left: 2rem;
 }
-
-.contact-action {
-  color: #f63a61;
-  display: block;
-  font-size: 16px;
-  font-weight: 500;
-  margin-top: 1rem;
-  text-align: left;
-  text-decoration: none;
-}

@@ -2,7 +2,7 @@ import React from "react";
 import TeamMember from "./TeamMember.js";
 import "./TeamSection.css";
 
-function TeamSection(props) {
+export default function TeamSection(props) {
   const team_members = [
     {
       imageUrl: "/alyssaongyx.jpeg",
@@ -47,17 +47,12 @@ function TeamSection(props) {
           </div>
           <div className="contact-description-container">
             <p className="contact-description">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-              accusantium doloremque laudantium.
+              Have a project in mind? Looking for collaboration? Or just want to
+              say hi? Connect and reach out to us!
             </p>
-            <a href="contact" className="contact-action">
-              Contact Us
-            </a>
           </div>
         </div>
       </section>
     </header>
   );
 }
-
-export default TeamSection;
