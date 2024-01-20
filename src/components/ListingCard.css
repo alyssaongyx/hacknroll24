@@ -1,0 +1,34 @@
+.listing-card {
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+  margin-bottom: 16px;
+}
+
+.listing-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.listing-image {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.listing-info {
+  padding: 16px;
+}
+
+.business-name {
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.business-description,
+.business-address,
+.business-hours {
+  font-size: 1em;
+  margin-bottom: 0.5em;
+}
