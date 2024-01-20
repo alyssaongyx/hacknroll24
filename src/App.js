@@ -1,25 +1,24 @@
-import logo from './logo.svg';
+import React from 'react';
+import ChatbotPage from './components/ChatbotPage';
+import ContactPage from './components/ContactPage';
+import HomePage from './components/HomePage';
+import ListingsPage from './components/ListingsPage';
+import NavBar from './components/NavBar';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import './App.css';
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/listings" element={<ListingsPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/chatbot" element={<ChatbotPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
-
-export default App;
