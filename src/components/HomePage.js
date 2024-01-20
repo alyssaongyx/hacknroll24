@@ -3,6 +3,7 @@ import { auth } from "../firebase-config";
 import { onAuthStateChanged } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import FeaturesSection from "./FeaturesSection";
+import CallToActionSection from "./CallToActionSection";
 import "./HomePage.css";
 
 export default function HomePage(props) {
@@ -46,6 +47,7 @@ export default function HomePage(props) {
         </section>
       </main>
       <FeaturesSection />
+      <CallToActionSection />
     </>
   );
 }
