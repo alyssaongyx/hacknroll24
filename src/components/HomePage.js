@@ -34,7 +34,7 @@ export default function HomePage(props) {
             neighborhood with our innovative platform.
           </p>
           <div className="button-group">
-            <Link to="/login" className="button-primary">
+            <Link to="/chatbot" className="button-primary">
               Get Started
             </Link>
             <Link to="/about" className="button-secondary">
