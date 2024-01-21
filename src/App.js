@@ -7,6 +7,7 @@ import NavBar from "./components/NavBar";
 import LoginPage from "./components/LogIn";
 import SignUpPage from "./components/SignUp";
 import Footer from "./components/Footer";
+import MapPage from "./components/MapPage";
 import {
   BrowserRouter as Router,
   Routes,
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="/chatbot" element={<ChatbotPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/map" element={<MapPage />} />
         </Routes>
       </div>
       <ConditionalFooter />

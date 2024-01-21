@@ -1,23 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ListingCard from "./ListingCard";
 import "./ListingsPage.css";
 
-// Dummy data for the listings
-// TODO: Remove and Fetch data from database
-const listingsData = [
-  {
-    id: 1,
-    name: "Ocean's Bounty Seafood",
-    description: "Fresh seafood and delightful dishes.",
-    address: "123 Seaside Blvd, Oceanview",
-    operatingHours: "Mon-Fri: 9am - 8pm, Sat-Sun: 10am - 9pm",
-    website: "http://www.oceansbountyseafood.com",
-  },
-];
-
 export default function ListingsPage() {
-  const [listings, setListings] = useState(listingsData);
+  const [listings, setListings] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    fetch("http://localhost:3001/api/listings")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (!Array.isArray(data)) {
+          throw new Error("Data format is not correct");
+        }
+        setListings(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -25,7 +31,7 @@ export default function ListingsPage() {
   };
 
   const filterListings = (searchTerm) => {
-    const filteredListings = listingsData.filter((listing) =>
+    const filteredListings = listings.filter((listing) =>
       listing.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setListings(filteredListings);
@@ -42,9 +48,10 @@ export default function ListingsPage() {
         />
       </div>
       <div className="listings-container">
-        {listings.map((business, index) => (
-          <ListingCard key={index} business={business} />
-        ))}
+        {Array.isArray(listings) &&
+          listings.map((business, index) => (
+            <ListingCard key={index} business={business} />
+          ))}
       </div>
     </div>
   );

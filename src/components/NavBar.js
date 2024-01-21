@@ -47,8 +47,8 @@ export default function NavBar() {
           <Link to="/listings" className="nav-link">
             Listings
           </Link>
-          <Link to="/contact" className="nav-link">
-            Contact
+          <Link to="/map" className="nav-link">
+            Map
           </Link>
         </nav>
         {user ? (

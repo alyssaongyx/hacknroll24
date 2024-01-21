@@ -19,8 +19,8 @@ export default function Footer() {
             <a href="/listings" className="footer-link">
               Listings
             </a>
-            <a href="/contact" className="footer-link">
-              Contact
+            <a href="/map" className="footer-link">
+              Map
             </a>
           </div>
           <div className="footer-cta">

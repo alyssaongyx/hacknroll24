@@ -24,7 +24,7 @@ export default function CallToActionSection() {
       </section>
 
       <section className="image-block">
-        <img src="screenshot.png" alt="Screenshot of LocalLinker" />
+        <img src="localhawker.jpeg" alt="Local Hawker" />
       </section>
     </main>
   );
