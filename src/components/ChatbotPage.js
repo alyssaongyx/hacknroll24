@@ -1,104 +1,137 @@
-import React, { useState, useRef } from "react";
+import { useState } from "react";
 import "./ChatbotPage.css";
+import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
+import {
+  MainContainer,
+  ChatContainer,
+  MessageList,
+  Message,
+  MessageInput,
+  TypingIndicator,
+} from "@chatscope/chat-ui-kit-react";
 
-export default function ChatbotPage() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const messagesEndRef = useRef(null);
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
+const API_KEY = "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";
+// "Explain things like you would to a 10 year old learning how to code."
+const systemMessage = {
+  //  Explain things like you're talking to a software professional with 5 years of experience.
+  role: "system",
+  content:
+    "Explain things like you're talking to a software professional with 2 years of experience.",
+};
 
-  const handleInputChange = (e) => {
-    setInput(e.target.value);
+function ChatbotPage() {
+  const [messages, setMessages] = useState([
+    {
+      message: "Hello, I'm ChatGPT! Ask me anything!",
+      sentTime: "just now",
+      sender: "ChatGPT",
+    },
+  ]);
+  const [isTyping, setIsTyping] = useState(false);
+
+  const handleSend = async (message) => {
+    const newMessage = {
+      message,
+      direction: "outgoing",
+      sender: "user",
+    };
+
+    const newMessages = [...messages, newMessage];
+
+    setMessages(newMessages);
+
+    // Initial system message to determine ChatGPT functionality
+    // How it responds, how it talks, etc.
+    setIsTyping(true);
+    await processMessageToChatGPT(newMessages);
   };
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    setIsScrolled(false);
-  };
+  async function processMessageToChatGPT(chatMessages) {
+    // messages is an array of messages
+    // Format messages for chatGPT API
+    // API is expecting objects in format of { role: "user" or "assistant", "content": "message here"}
+    // So we need to reformat
 
-  const handleScroll = (e) => {
-    const isAtBottom =
-      e.target.scrollHeight - e.target.scrollTop <= e.target.clientHeight;
-    setIsScrolled(!isAtBottom);
-  };
-
-  // Get response from bot
-  const getBotResponse = async (userInput) => {
-    try {
-      // TODO: Replace with our API
-      const response = await fetch("/api/chatbot", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: userInput }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    let apiMessages = chatMessages.map((messageObject) => {
+      let role = "";
+      if (messageObject.sender === "ChatGPT") {
+        role = "assistant";
+      } else {
+        role = "user";
       }
+      return { role: role, content: messageObject.message };
+    });
 
-      const data = await response.json();
-      return {
-        text: data.reply,
-        sender: "bot",
-      };
-    } catch (error) {
-      console.error("Could not get a response from the chatbot:", error);
-      return {
-        // TODO: Replace with the response
-        text: "Sorry, I'm having trouble understanding you.",
-        sender: "bot",
-      };
-    }
-  };
+    // Get the request body set up with the model we plan to use
+    // and the messages which we formatted above. We add a system message in the front to'
+    // determine how we want chatGPT to act.
+    const apiRequestBody = {
+      model: "gpt-3.5-turbo",
+      messages: [
+        systemMessage, // The system message DEFINES the logic of our chatGPT
+        ...apiMessages, // The messages from our chat with ChatGPT
+      ],
+    };
 
-  // Function to handle the click event of the send button
-  const handleSendClick = async () => {
-    if (input.trim()) {
-      const newMessage = {
-        text: input,
-        sender: "user",
-      };
-      setMessages((messages) => [...messages, newMessage]);
-      setInput("");
-
-      const botResponse = await getBotResponse(input);
-      setMessages((messages) => [...messages, botResponse]);
-    }
-  };
+    await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + API_KEY,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(apiRequestBody),
+    })
+      .then((data) => {
+        return data.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setMessages([
+          ...chatMessages,
+          {
+            message: data.choices[0].message.content,
+            sender: "ChatGPT",
+          },
+        ]);
+        setIsTyping(false);
+      });
+  }
 
   return (
     <div className="chatbot-container">
-      <div className="chatbot">
-        <div className="chatbot-messages" onScroll={handleScroll}>
-          {messages.map((message, index) => (
-            <div key={index} className={`message ${message.sender}`}>
-              {message.text}
+      <div class="chatbot">
+        <div className="chatbot-messages">
+          <div style={{ position: "relative" }}>
+            <div className="chatbot-input">
+              <div className="input-container">
+                <MainContainer>
+                  <ChatContainer>
+                    <MessageList
+                      scrollBehavior="smooth"
+                      typingIndicator={
+                        isTyping ? (
+                          <TypingIndicator content="ChatGPT is typing" />
+                        ) : null
+                      }
+                    >
+                      {messages.map((message, i) => {
+                        console.log(message);
+                        return <Message key={i} model={message} />;
+                      })}
+                    </MessageList>
+                    <MessageInput
+                      placeholder="Type message here"
+                      onSend={handleSend}
+                    />
+                  </ChatContainer>
+                </MainContainer>
+              </div>
             </div>
-          ))}
-          <div ref={messagesEndRef} /> {}
-        </div>
-        <div className="chatbot-input">
-          <div className="input-container">
-            <input
-              type="text"
-              value={input}
-              onChange={handleInputChange}
-              onKeyPress={(e) => e.key === "Enter" && handleSendClick()}
-              placeholder="Type your message here!"
-            />
-            <button onClick={handleSendClick} className="send-button">
-              <img src="/arrowicon.svg" alt="Send" />
-            </button>
           </div>
         </div>
-        {isScrolled && (
-          <button className="scroll-to-bottom" onClick={scrollToBottom}>
-            <img src="/arrowdown.svg" alt="Scroll to bottom" />
-          </button>
-        )}
       </div>
     </div>
   );
 }
+
+export default ChatbotPage;
